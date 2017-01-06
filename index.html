@@ -1,0 +1,58 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script type="text/javascript" src="https://vega.github.io/vega/vega.min.js"></script>
+  <script type="text/javascript" src="https://npmcdn.com/arcgis-cedar/dist/cedar.js"></script>
+</head>
+<body>
+
+<div class="row">
+  <div style="width: 300px; height: 340px" id="chart"></div>
+
+</div>
+
+<style>
+.cedar-tooltip {
+  font-family: sans-serif;
+  padding-top: 10px;
+}
+</style>
+
+<script>
+  var chart = new Cedar({"type": "bar"});
+  //create the dataset w/ mappings
+  var dataset = {
+   "url": "https://services1.arcgis.com/MxjRokvPm7bjslyR/ArcGIS/rest/services/Summarize%20Acres%20within%20Active_Applications_Dissolve/FeatureServer/0",
+   "query": {
+      "groupByFieldsForStatistics": "VAP_TYPE_S",
+      "outStatistics": [{
+        "statisticType": "sum",
+        "onStatisticField": "TotalAcres",
+        "outStatisticFieldName": "SumAcresByTypes"
+      }]
+    },
+    "mappings": {
+      "sort": "SumAcresByTypes DESC",
+      "x": {
+        "field": "VAP_TYPE_S",
+        "label": "Land Use"
+      },
+      "y": {
+        "field": "SumAcresByTypes",
+        "label": "Total Acres"
+      }
+    }
+  };
+  chart.tooltip = {
+    "title": "{VAP_TYPE_S}",
+    "content": "{SumAcresByTypes}"
+  };
+  //assign to the chart
+  chart.dataset = dataset;
+  //show the chart
+  chart.show({
+    elementId: "#chart"
+  });
+</script>
+</body>
+</html>
