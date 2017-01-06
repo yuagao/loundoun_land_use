@@ -20,39 +20,44 @@
 
 <script>
   var chart = new Cedar({"type": "bar"});
+
   //create the dataset w/ mappings
   var dataset = {
    "url": "https://services1.arcgis.com/MxjRokvPm7bjslyR/ArcGIS/rest/services/Summarize%20Acres%20within%20Active_Applications_Dissolve/FeatureServer/0",
    "query": {
       "groupByFieldsForStatistics": "VAP_TYPE_S",
       "outStatistics": [{
-        "statisticType": "sum",
-        "onStatisticField": "TotalAcres",
-        "outStatisticFieldName": "SumAcresByTypes"
+        "statisticType": "count",
+        "onStatisticField": "VAP_APPL_N",
+        "outStatisticFieldName": "SumNumAppByTypes"
       }]
     },
     "mappings": {
-      "sort": "SumAcresByTypes DESC",
+      "sort": "SumNumAppByTypes DESC",
       "x": {
         "field": "VAP_TYPE_S",
         "label": "Land Use"
       },
       "y": {
-        "field": "SumAcresByTypes",
-        "label": "Total Acres"
+        "field": "SumNumAppByTypes",
+        "label": "Numbers of Each Type of Application"
       }
     }
   };
+
   chart.tooltip = {
     "title": "{VAP_TYPE_S}",
-    "content": "{SumAcresByTypes}"
+    "content": "{SumNumAppByTypes}"
   };
+
   //assign to the chart
   chart.dataset = dataset;
+
   //show the chart
   chart.show({
     elementId: "#chart"
   });
+
 </script>
 </body>
 </html>
